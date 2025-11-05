@@ -1,0 +1,160 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#6366f1", secondary: "#8b5cf6" },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+  </head>
+
+  <body class="bg-gray-50">
+    <!-- Header -->
+    <section class="top-txt">
+      <div class="head container">
+        <div class="head-txt">
+          <p></p>
+        </div>
+        <div class="sing_in_up">
+          <a href="{% url 'accounts:login' %} ">USER</a>
+          <a href=" {% url 'cart:Cart' %} " aria-label="Carrito de Compras"><i class="bx bx-cart" ></i></a>
+          <a href="{% url 'admin:index' %}"><i class="fa-solid fa-user"></i></a>
+        </div>
+      </div>
+    </section>
+    <nav class="navbar">
+      <div class="navbar-container">
+        <input type="checkbox" name="" id="checkbox" />
+        <div class="hamburger-lines">
+          <span class="line line1"></span>
+          <span class="line line2"></span>
+          <span class="line line3"></span>
+        </div>
+        <ul class="menu-items">
+          <li><a href="{% url 'Home' %}">Home</a></li>
+          <li><a href="{% url 'Tienda' %}">Tienda</a></li>
+          <li><a href="{% url 'Servicios' %}">Servicios</a></li>
+          <li><a href="{% url 'Blog' %}">Blog</a></li>
+          <li><a href="{% url 'Contacto' %}">Contacto</a></li>
+        </ul>
+        {% comment %} Logo {% endcomment %}
+
+        <div class="logo">
+          <img src="/media/home/Sonia CrochetWB.png" alt="" />
+        </div>
+      </div>
+    </nav>
+
+    {% block content %} {% endblock %}
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-container container">
+        <div class="content_1">
+          <div class="logo">
+            <img src="/media/home/Sonia CrochetBB.png" alt="" />
+          </div>
+          <p>
+            Nuestra esencia es tejer historias. <br />
+            Cada pieza nace de un diseño único <br />
+            y lleva el corazón de la tradición artesanal<br />
+             colombiana. Tú, como cliente, eres la <br />
+             inspiración y el centro de nuestro saber hacer.<br />
+          </p>
+          <img src="https://i.postimg.cc/Nj9dgJ98/cards.png" alt="cards" />
+        </div>
+        <div class="content_2">
+          <h4>SHOPPING</h4>
+          <a href="{% url 'Tienda' %}">Tienda</a>
+          <a {% url 'cart:Cart' %}>Carrito</a>
+          <a {% url 'accounts:login' %}>Login</a>
+        </div>
+        <div class="content_3">
+          <h4>SHOPPING</h4>
+          <a href="{% url 'Contacto' %}">Contacto</a>
+          
+        </div>
+        <div class="content_4">
+          <h4>NEWLETTER</h4>
+          <p>
+            Sé la primera persona en conocer</br> nuestros nuevos tejidos, colecciones,</br> ventas exclusivas y promociones especiales.
+          </p>
+          <div class="f-mail">
+            <input type="email" placeholder="Tu correo" />
+            <i class="bx bx-envelope"></i>
+          </div>
+          <hr />
+        </div>
+      </div>
+      <div class="f-design">
+        <div class="f-design-txt container">
+          <p>Design and Code by code.sanket</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      $(document).ready(function () {
+        $("a").on("click", function (event) {
+          if (this.hash !== "") {
+            event.preventDefault();
+
+            var hash = this.hash;
+            $("html, body").animate(
+              {
+                scrollTop: $(hash).offset().top,
+              },
+              800,
+              function () {
+                window.location.hash = hash;
+              }
+            );
+          }
+        });
+      });
+
+      $(".menu-items a").click(function () {
+        $("#checkbox").prop("checked", false);
+      });
+    </script>
+  </body>
+</html>

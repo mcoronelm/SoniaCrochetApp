@@ -1,0 +1,78 @@
+{% extends "SoniaCrochetApp/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+    <section id="home">
+        <div class="home_page ">
+            <div class="home_img ">
+               <img src="{% static 'media/tienda/ss23_wk10_in_desk_2.jpg' %}" alt="img ">
+            </div>
+            <div class="home_txt ">
+                <p class="collectio ">SUMMER COLLECTION</p>
+                <h2>OTOÑO-INVIERNO <br> Colección 2025</h2>
+                <div class="home_label ">
+                    <p>Una marca que crea piezas de lujo esenciales.</br> Tejidas éticamente, con un firme compromiso</br> 
+                        con la calidad artesanal colombiana y el diseño </br>
+                        atemporal.</p>
+                </div>
+                <button><a href="{% url 'Tienda' %}">COMPRAR AHORA</a><i class='bx bx-right-arrow-alt'></i></button>
+                <div class="home_social_icons">
+                    <a href="#"><i class='bx bxl-facebook'></i></a>
+                    <a href="#"><i class='bx bxl-twitter'></i></a>
+                    <a href="#"><i class='bx bxl-pinterest'></i></a>
+                    <a href="#"><i class='bx bxl-instagram'></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<section id="collection">
+    <div class="collections container">
+        
+        <div class="content">
+            {% with p1=productos_coleccion.0 %}
+                {% if p1 %}
+                    <img src="{{ p1.imagen.url }}" alt="{{ p1.nombre }}" />
+                {% endif %}
+            {% endwith %}
+            <div class="img-content">
+                <p>Bufandas</p>
+                <button><a href="{% url 'Tienda' %}">COMPRAR</a></button>
+            </div>
+        </div>
+
+        <div class="content2">
+            {% with p2=productos_coleccion.1 %}
+                {% if p2 %}
+                    <img src="{{ p2.imagen.url }}" alt="{{ p2.nombre }}" />
+                {% else %}
+                    <img src="https://i.pinimg.com/564x/00/bb/03/00bb03f4f78414ab11724b4aff62634c.jpg" alt="img" />
+                {% endif %}
+            {% endwith %}
+            <div class="img-content2">
+                <p>Gorros</p>
+                <button><a href="{% url 'Tienda' %}">COMPRAR</a></button>
+            </div>
+        </div>
+
+        <div class="content3">
+            {% with p3=productos_coleccion.2 %}
+                {% if p3 %}
+                    <img src="{{ p3.imagen.url }}" alt="{{ p3.nombre }}" />
+                {% else %}
+                    <img src="https://i.pinimg.com/200x150/11/54/d1/1154d12da213698c3b68501082e2bb5b.jpg" alt="img" />
+                {% endif %}
+            {% endwith %}
+            <div class="img-content3">
+                <p>Tops</p>
+                <button><a href="{% url 'Tienda' %}">COMPRAR</a></button>
+            </div>
+        </div>
+    </div>
+</section>
+ 
+
+
+{% endblock %}

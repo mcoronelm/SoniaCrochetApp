@@ -1,0 +1,520 @@
+{% extends "SoniaCrochetApp/base.html" %} 
+{% load static %} 
+{% block content %}
+
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<div class="cart-page-content">
+  <style>
+    /* --- Mantiene tu mismo CSS --- */
+    :root {
+      --onyx: hsl(0, 0%, 25%);
+      --negro: hsla(0, 6%, 6%, 1.00);
+      --rose-shock: hsl(330, 100%, 60%);
+      --white: hsl(0, 0%, 100%);
+      --platinum: hsl(0, 0%, 91%);
+      --gainsboro: hsl(0, 0%, 90%);
+      --red-salsa: hsl(0, 77%, 60%);
+      --dim-gray: hsl(0, 0%, 39%);
+      --davys-gray: hsl(0, 0%, 30%);
+      --spanish-gray: hsl(0, 0%, 62%);
+      --quick-silver: hsl(0, 0%, 64%);
+      --fs-28: 28px;
+      --fs-24: 24px;
+      --fs-18: 18px;
+      --fs-15: 15px;
+      --fs-14: 14px;
+      --fw-5: 500;
+      --fw-6: 600;
+      --fw-7: 700;
+      --padding-x: 60px;
+      --radius: 5px;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: hsl(0, 0%, 80%);
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: hsl(0, 0%, 70%);
+    }
+
+    .cart-main-container {
+      max-width: 100%;
+      min-height: 100vh;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .heading {
+      font-size: var(--fs-28);
+      font-weight: var(--fw-6);
+      color: var(--onyx);
+      border-bottom: 1px solid var(--gainsboro);
+      padding: 20px var(--padding-x);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .item-flex {
+      display: flex;
+      flex-grow: 1;
+    }
+
+    .checkout {
+      width: 70%;
+      padding: 40px var(--padding-x);
+      background: var(--white);
+      border-right: 1px solid var(--gainsboro);
+    }
+
+    .checkout .btn-wrapper {
+        width: 100%;
+        max-width: 300px; /* Limita el ancho del botón para que no sea excesivo */
+        margin: 20px auto 0; /* Centra el botón y le da margen superior */
+    }
+
+    .checkout .btn-wrapper button.btn-primary {
+        background-color: var(--negro); /* Fondo negro */
+        color: var(--white); /* Texto blanco */
+        border: none;
+        border-radius: var(--radius);
+        padding: 15px 30px;
+        font-size: var(--fs-18);
+        font-weight: var(--fw-7);
+        cursor: pointer;
+        width: 100%; /* Rectángulo completo dentro de su contenedor */
+        transition: background-color 0.2s;
+        display: flex; /* Para justificar el texto y el monto */
+        justify-content: space-between; /* Alinear "Pagar" a la izquierda y el monto a la derecha */
+        align-items: center;
+    }
+
+    .checkout .btn-wrapper button.btn-primary:hover {
+        background-color: var(--dim-gray); /* Efecto hover más oscuro */
+    }
+
+    /* Aseguramos que el label y el input de la fecha estén alineados correctamente */
+    .checkout .expire-date .input-flex {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .section-heading {
+      color: var(--rose-shock);
+      margin-bottom: 30px;
+      font-size: var(--fs-24);
+      font-weight: var(--fw-5);
+    }
+
+    .cart {
+      width: 40%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+    .cart-item-box {
+      padding: 40px var(--padding-x);
+      margin-bottom: auto;
+    }
+    .product-card:not(:last-child) {
+      margin-bottom: 20px;
+    }
+    .card {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+    }
+    .card .product-img {
+      border-radius: var(--radius);
+    }
+    .card .detail .product-name {
+      font-weight: var(--fw-6);
+      font-size: var(--fs-15);
+      color: var(--dim-gray);
+      margin-bottom: 10px;
+    }
+    .card .detail .wrapper {
+      display: flex;
+      gap: 20px;
+    }
+    .product-qty {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .product-qty button {
+      background: var(--platinum);
+      width: 20px;
+      height: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .product-qty button ion-icon {
+      --ionicon-stroke-width: 60px;
+      font-size: 10px;
+    }
+    .product-close-btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+    .product-close-btn ion-icon {
+      font-size: 25px;
+      color: var(--quick-silver);
+    }
+    .product-close-btn:hover ion-icon {
+      color: var(--red-salsa);
+    }
+
+    /* === ESTILOS MEJORADOS PARA CÓDIGO DE DESCUENTO === */
+    .discount-token {
+      padding: 25px var(--padding-x);
+      border-top: 1px solid var(--gainsboro);
+      border-bottom: 1px solid var(--gainsboro);
+      background: var(--white);
+    }
+
+    .discount-token .label-default {
+      display: block;
+      margin-bottom: 12px;
+      font-weight: var(--fw-6);
+      color: var(--dim-gray);
+      font-size: var(--fs-15);
+    }
+
+    .wrapper-flex {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .wrapper-flex .input-default {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1px solid var(--gainsboro);
+      border-radius: var(--radius);
+      font-size: var(--fs-14);
+    }
+
+    .wrapper-flex .btn {
+      padding: 12px 20px;
+      white-space: nowrap;
+    }
+
+    .btn-danger {
+      background: var(--red-salsa);
+      color: var(--white);
+      border: none;
+      padding: 8px 16px;
+      border-radius: var(--radius);
+      font-size: var(--fs-12);
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .btn-danger:hover {
+      background: hsl(0, 77%, 50%);
+    }
+
+    /* === ESTILOS MEJORADOS PARA LA SECCIÓN DE MONTOS === */
+    .amount {
+      padding: 30px var(--padding-x);
+      background: var(--platinum);
+      border-radius: var(--radius);
+      margin: 20px var(--padding-x);
+    }
+
+    .amount > div {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+    }
+
+    .amount > div:not(:last-child) {
+      border-bottom: 1px solid var(--gainsboro);
+    }
+
+    .amount > div:last-child {
+      border-top: 2px solid var(--onyx);
+      margin-top: 8px;
+      padding-top: 16px;
+    }
+
+    .amount .subtotal {
+      font-weight: var(--fw-6);
+      color: var(--davys-gray);
+      font-size: var(--fs-15);
+    }
+
+    .amount .discount {
+      color: var(--red-salsa);
+      font-weight: var(--fw-6);
+    }
+
+    .amount .tax, 
+    .amount .shipping {
+      color: var(--dim-gray);
+      font-size: var(--fs-14);
+    }
+
+    .amount .total {
+      font-size: var(--fs-18);
+      font-weight: var(--fw-7);
+      color: var(--onyx);
+    }
+
+    .amount span:first-child {
+      font-weight: var(--fw-5);
+    }
+
+    .amount span:last-child {
+      font-weight: var(--fw-6);
+      min-width: 80px;
+      text-align: right;
+    }
+  </style>
+
+  <main class="cart-main-container">
+    <h1 class="heading">
+      <ion-icon name="cart-outline"></ion-icon> Carrito de compra
+    </h1>
+
+    <div class="item-flex">
+      <!-- ========== DETALLES DE PAGO (IZQUIERDA) ========== -->
+      <section class="checkout">
+        <h2 class="section-heading">Detalles de pago</h2>
+        <div class="payment-form ">
+          <form action="{% url 'cart:process_payment' %}" method="post">
+              {% csrf_token %}
+            <div class="cardholder-name">
+              <label for="cardholder-name" class="label-default"
+                >Titular de la tarjeta</label
+              >
+              <input
+                type="text"
+                id="cardholder-name"
+                class="input-default"
+                name="cardholder-name"
+                placeholder="Nombre completo"
+              />
+            </div>
+
+            <div class="card-number">
+              <label for="card-number" class="label-default"
+                >Número de tarjeta</label
+              >
+              <input
+                type="text"
+                id="card-number"
+                class="input-default"
+                name="card-number"
+                placeholder="XXXX XXXX XXXX XXXX"
+              />
+            </div>
+
+            <div class="input-flex">
+              <div class="expire-date">
+                <label for="expire-date" class="label-default"
+                  >Fecha de expiración</label
+                >
+                <div class="input-flex">
+                  <input
+                    type="number"
+                    name="month"
+                    id="expire-date-month"
+                    class="input-default"
+                    placeholder="MM"
+                    min="1"
+                    max="12"
+                  />
+                  /
+                  <input
+                    type="number"
+                    name="year"
+                    id="expire-date-year"
+                    class="input-default"
+                    placeholder="YY"
+                    min="23"
+                    max="99"
+                  />
+                </div>
+              </div>
+
+              <div class="cvv">
+                <label for="cvv" class="label-default">CVV</label>
+                <input
+                  type="number"
+                  id="cvv"
+                  class="input-default"
+                  name="cvv"
+                  placeholder="123"
+                />
+              </div>
+              <center>
+              <div class="btn-wrapper">
+                <button class="btn btn-primary"  type="submit">
+                    Pagar 
+                    <span>${{ total|floatformat:2|default:"0.00" }}</span>
+                </button> 
+              </div>
+            </center>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ========== CARRITO DE PRODUCTOS DINÁMICO (ACTUALIZADO) ========== -->
+      <section class="cart">
+        <div class="cart-item-box">
+          <h2 class="section-heading">Pedido</h2>
+
+          {% if items %} 
+            {% for item in items %}
+            <div class="product-card">
+              <div class="card">
+                <div class="img-box">
+                  <img
+                    src="{{ item.producto.imagen.url }}"
+                    alt="{{ item.producto.nombre }}"
+                    width="80px"
+                    class="product-img"
+                  />
+                </div>
+
+                <div class="detail">
+                  <h4 class="product-name">{{ item.producto.nombre }}</h4>
+                  <div class="wrapper">
+                    <!-- Botones de control de cantidad -->
+                    <div class="product-qty">
+                      <div class="product-actions">
+                        
+                        <!-- BOTÓN RESTAR (-) -->
+                        <!-- Usamos la URL 'restar_producto' que espera el ID del Producto -->
+                        <a href="{% url 'cart:restar_producto' item.producto.id %}" class="btn-qty">
+                          <ion-icon name="remove-outline"></ion-icon>
+                        </a>
+                        
+                        <span>{{ item.cantidad }}</span>
+                        
+                        <!-- BOTÓN AGREGAR (+) -->
+                        <!-- Usamos la URL 'add_to_cart' que espera el ID del Producto -->
+                        <a href="{% url 'cart:add_to_cart' item.producto.id %}" class="btn-qty">
+                          <ion-icon name="add-outline"></ion-icon>
+                        </a>
+                      </div>
+                    </div>
+                    <!-- FIN Botones de control de cantidad -->
+
+                    <div class="price">
+                      <span>${{ item.subtotal|floatformat:2 }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Botón de eliminar producto del carrito -->
+                <div class="remove-btn">
+                  <!-- BOTÓN ELIMINAR (X) -->
+                  <!-- Usamos la URL 'remove_from_cart' que espera el ID del Item de Carrito -->
+                  <a href="{% url 'cart:remove_from_cart' item.id %}" class="btn-remove">
+                    <ion-icon name="close-circle"></ion-icon>
+                  </a>
+                </div>
+                <!-- FIN Botón de eliminar -->
+              </div>
+            </div>
+            {% endfor %} 
+          {% else %}
+          <p class="text-center p-4">Tu carrito está vacío. ¡Añade algunos productos!</p>
+          {% endif %}
+        </div>
+
+        <div class="wrapper">
+          <!-- === SECCIÓN DE CÓDIGO DE DESCUENTO MEJORADA === -->
+          <div class="discount-token"> 
+            <label for="coupon_code_input" class="label-default">Código de descuento</label>
+            <form action="{% url 'cart:apply_coupon' %}" method="post">
+              {% csrf_token %}
+              <div class="wrapper-flex">
+                <input
+                  type="text"
+                  name="coupon_code"
+                  id="coupon_code_input"
+                  class="input-default"
+                  placeholder="Introduce tu código"
+                  value="{{ carrito.cupon.codigo|default:'' }}"
+                />
+                <button type="submit" class="btn btn-outline">Aplicar</button>
+              </div>
+            </form>
+            
+            {% if carrito_activo.cupon %}
+            <form action="{% url 'cart:apply_coupon' %}" method="post" style="margin-top: 10px;">
+              {% csrf_token %}
+              <input type="hidden" name="coupon_code" value="">
+              <button type="submit" class="btn-danger">Remover Cupón ({{ carrito_activo.cupon.codigo }})</button>
+            </form>
+            {% endif %}
+          </div>
+
+          <!-- === SECCIÓN DE MONTOS CON SUBTOTAL MEJORADA === -->
+          <div class="amount">
+            <div class="subtotal">
+              <span>Subtotal</span>
+              <span>$ {{ subtotal|floatformat:2|default:"0.00" }}</span>
+            </div>
+            
+            {% if carrito_activo.cupon %}
+            <div class="discount">
+              <span>Descuento ({{ carrito_activo.cupon.codigo }})</span>
+              <span>- $ {{ descuento_monto|floatformat:2 }}</span>
+            </div>
+            {% endif %}
+            
+            <div class="tax">
+              <span>Impuestos</span>
+              <span>$ {{ tax|floatformat:2|default:"0.00" }}</span>
+            </div>
+
+            <div class="shipping">
+              <span>Envío</span>
+              <span>$ {{ shipping|floatformat:2|default:"0.00" }}</span>
+            </div>
+
+            <div class="total">
+              <span>Total</span>
+              <span>$ {{ total|floatformat:2|default:"0.00" }}</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script
+    type="module"
+    src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+  ></script>
+  <script
+    nomodule
+    src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+  ></script>
+{% endblock content %}

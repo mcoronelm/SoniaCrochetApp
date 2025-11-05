@@ -1,0 +1,62 @@
+{% extends "SoniaCrochetApp/base.html" %} {% block title %} Tienda {% endblock%} 
+
+{% block content %}
+<section id="sellers">
+  <div class="seller container">
+    <h2>Todos los productos</h2>
+    <div class="best-seller">
+      {% for producto in productos %}
+      <div class="best-p1">
+        <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" />
+
+        <div class="best-p1-txt">
+          <div class="name-of-p">
+            <p>{{ producto.nombre }}</p>
+          </div>
+
+          <div class="price">
+            &dollar;{{ producto.precio }}
+
+            <div class="colors product-colors">
+              {% for color in producto.colores.all %}
+              <span
+                class="color-circle"
+                title="{{ color.nombre }}"
+                style="background-color: {{ color.hex }}"
+              ></span>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- 🛒 FORMULARIO DE AGREGAR AL CARRITO -->
+                             
+          <div class="product-actions">
+                                 
+            <form
+              method="post"
+              action=" {% url 'cart:add_to_cart' producto.id %} "
+            >
+                                     {% csrf_token %}
+
+              <!-- campo cantidad opcional -->
+              <input
+                type="number"
+                name="cantidad"
+                value="1"
+                min="1"
+                style="width: 50px; text-align: center"
+              />
+
+              <button type="submit" class="btn btn-primary">
+                Agregar al carrito
+              </button>
+            </form>
+          </div>
+          <!-- fin del formulario -->
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

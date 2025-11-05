@@ -1,0 +1,40 @@
+{% extends "SoniaCrochetApp/base.html" %}
+
+{% block title %} Blog {% endblock %}
+
+{% block content %}
+    <section id="news">
+        <div class="news-heading">
+            <p>LATEST NEWS</p>
+            <h2>Fashion New Trends</h2>
+        </div>
+        <div class="l-news container">
+            {% for post in posts %}
+            <div class="l-news1">
+                <div class="news1-img">
+                    <img src="{{post.imagen.url}}" alt="img">
+                </div>
+                <center>
+                <div class="news1-conte">
+                    <div class="date-news1">
+                        <h4><i class='bx bxs-calendar'></i> {{ post.titulo|upper }}</h4>
+                        <p>{{post.contenido}}</p>
+                        <p><i class='bx bxs-calendar'></i> {{post.created}}</p>
+                        <p><i class='bx bxs-calendar'></i> {{post.updated}}</p>
+                        <h4>Categorías:</h4>
+                        <div class="categories">
+                        {% for categoria_post in post.categorias.all %}
+                        <span>
+                            <a href="{% url 'categoria' categoria_post.id %}"> {{ categoria_post.nombre }}</a>
+                        </span>
+                        {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </center>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+{% endblock %}

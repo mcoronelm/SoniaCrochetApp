@@ -1,0 +1,34 @@
+{% extends "SoniaCrochetApp/base.html" %}
+
+{% block title %} Contacto {% endblock %}
+
+{% block content %}
+
+  <section id="contact">
+        <div class="contact container">
+        <form action="{% url 'Contacto' %}" method="POST">
+            {% comment %} CSRF (Cross-Site Request Forgery) para confirmar que la solicitud {% endcomment %}
+            {% csrf_token %}
+            <div class="form">
+                <div class="form-txt">
+                    <h4>INFORMACIÓN</h4>
+                    <h1>CONTÁCTANOS</h1>
+                    <span>Como empresa dedicada a la alta costura tejida a mano, prestamos una atención rigurosa a cada detalle y a la comunicación directa con nuestros clientes.</span>
+                    <h3>Medillín</h3>
+                    <p>Carrera 37 # 8A - 15, Barrio El Poblado, Sector Provenza. 050021<br>+57 (604) 543-9876</p>
+                    <h3>Bogotá</h3>
+                    <p>Calle 79 # 12 - 45, Local 101, Barrio Chapinero Alto. 110221<br>+57 (601) 756-3210</p>
+                </div>
+                <div class="form-details">
+                    <input type="text" name="nombre" id="name" placeholder="Nombre" required>
+                    <input type="email" name="email" id="email" placeholder="Correo" required>
+                    <textarea name="mensaje" id="mensaje" cols="52" rows="7" placeholder="Escribe aquí tu mensaje" required></textarea>
+                    <button type="submit">ENVIAR MENSAJE</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    </section>
+
+
+{% endblock %}

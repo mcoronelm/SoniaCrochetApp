@@ -1,0 +1,76 @@
+{% extends "SoniaCrochetApp/base.html" %}
+
+{% block title %} Registro de usuario {% endblock %}
+
+{% block content %}
+
+<section id="contact">
+    <div class="contact container">
+        
+        <form action="{% url 'accounts:register_client' %}" method="POST"> 
+            {% csrf_token %}
+            {% if next_url %}
+                <input type="hidden" name="next" value="{{ next_url }}">
+            {% endif %}
+            <div class="form">
+                
+                <div class="form-txt">
+                    <h4>CREA TU CUENTA</h4>
+                    <h1>REGISTRO DE CLIENTE</h1>
+                    <span>Únete a nuestra comunidad para guardar tus favoritos, gestionar tus pedidos y disfrutar de contenido exclusivo.</span>
+                    
+                    {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    
+                    <p style="margin-top: 20px; font-size: 12px;">Al registrarte, aceptas nuestros términos y condiciones.</p>
+
+                </div>
+                
+                <div class="form-details">
+                    
+                    {% for field in form %}
+                        
+                        {% if field.name == 'username' or field.name == 'email' or field.name == 'first_name' or field.name == 'last_name' %}
+                            {{ field.errors }}
+                            <input 
+                                type="{{ field.field.widget.input_type|default:'text' }}" 
+                                name="{{ field.name }}" 
+                                id="{{ field.id_for_label }}" 
+                                placeholder="{{ field.label|capfirst }}" 
+                                value="{{ field.value|default:'' }}"
+                                class="form-control"
+                                {% if field.field.required %}required{% endif %}
+                            >
+                        
+                        {% elif field.name == 'password1' or field.name == 'password2' %}
+                            {{ field.errors }}
+                            <input 
+                                type="password" 
+                                name="{{ field.name }}" 
+                                id="{{ field.id_for_label }}" 
+                                placeholder="{{ field.label|capfirst }}"
+                                class="form-control"
+                                required
+                            >
+                        
+                        {% else %}
+                            {{ field.errors }}
+                            {{ field }}
+                        {% endif %}
+                        
+                    {% endfor %}
+                    
+                    <button type="submit">CREAR CUENTA</button>
+                    
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+{% endblock %}

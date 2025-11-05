@@ -1,0 +1,423 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Iniciar Sesión - Sonia Crochet Art</title>
+    <style>
+      /* --- Estilos CSS Completos (Tal como los proporcionaste) --- */
+      :root {
+        --background: #f5f5f5;
+        --brand-color: #396be2;
+        --color: #202020;
+        --color-smooth: #606060;
+        --color-white: #f5f5f5;
+        --blue: #2155cd;
+        --blue-50: #2155cd80;
+        --blue-hover: #396be2;
+        --blue-hover-50: #396be280;
+        --item-bg: #eee;
+        --item-border: #d6d6d6;
+        --shadow: rgba(0, 0, 0, 0.1);
+        --submit-shadow: rgba(33, 85, 205, 0.25);
+      }
+      body {
+        min-width: 100%;
+        min-height: 100%;
+        height: 100vh;
+        background-color: var(--background);
+      }
+
+      .page-hero {
+        max-height: 100vh;
+        max-width: 100vw;
+        overflow: hidden;
+      }
+
+      .login-page {
+        display: flex;
+        justify-content: center;
+      }
+
+      .prewiev-hero {
+        width: 50vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        background-color: var(--brand-color);
+      }
+
+      .prewiev-hero img {
+        width: 80%;
+        height: auto;
+        object-fit: cover;
+        border-radius: 0.5rem;
+      }
+
+      .form-hero {
+        width: 50vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 1.5rem;
+        gap: 2rem;
+      }
+
+      .form-head {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .logo {
+        width: 7rem;
+        height: 7rem;
+        padding: 1.5rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--brand-color);
+        box-shadow: 0px 0px 20px var(--shadow);
+      }
+
+      .login-title {
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--color);
+      }
+
+      .form {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 400px;
+        max-width: 90%;
+      }
+
+      .input-hero {
+        width: 100%;
+        height: 40px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .input-hero input {
+        width: 100%;
+        height: 100%;
+        display: block;
+        top: 0;
+        left: 0;
+        position: absolute;
+        font-weight: 500;
+        font-size: 1rem;
+        color: var(--color);
+        border-radius: 0.5rem;
+        border: 0.125rem solid var(--item-border);
+        background: var(--background);
+        padding: 0.5rem 3rem 0.5rem 1rem;
+        transition: all 0.25s ease 0s;
+      }
+
+      .input-hero input:focus {
+        border-color: var(--blue-50);
+        outline: 0;
+      }
+
+      .input-name {
+        left: 1rem;
+        position: relative;
+        display: block;
+        background: var(--background);
+        z-index: 2;
+        transition: all 0.25s ease 0s;
+        top: 0;
+        color: var(--color-smooth);
+      }
+
+      /* Esta lógica se maneja mejor con JS o renderizando los placeholders.
+         Para usar el formulario de Django, simplificaremos la posición del label. */
+      
+      /* .input-hero input:focus + .input-name {
+        top: -1.25rem;
+        color: var(--blue);
+      }
+
+      .input-hero input:valid + .input-name {
+        top: -1.25rem;
+      } */
+      /* Fin de estilos flotantes */
+
+      .input-icon {
+        position: relative;
+        right: 0.5rem;
+        z-index: 2;
+        color: var(--color-smooth);
+        transition: all 0.25s ease 0s;
+      }
+
+      .input-hero input:focus ~ .input-icon { /* Cambiado a ~ para ser independiente del label */
+        color: var(--blue);
+      }
+
+      .input-icon svg {
+        vertical-align: middle;
+        width: 1.875rem;
+        height: 1.875rem;
+      }
+
+      .password-input {
+        margin-bottom: 1.25rem;
+      }
+
+      .recovery-password {
+        position: absolute;
+        bottom: -1.15rem;
+        right: 0;
+        color: var(--blue);
+        text-decoration: none; /* Añadido para mejor visualización */
+        font-size: 0.9rem;
+      }
+      
+      /* Estilos para errores de formulario de Django */
+      .errorlist {
+          list-style: none;
+          padding: 0;
+          margin-top: -0.5rem;
+          margin-bottom: 0.5rem;
+          color: red;
+          font-size: 0.9rem;
+          width: 100%;
+      }
+      
+      .messages {
+          list-style: none;
+          padding: 10px;
+          border-radius: 0.5rem;
+          margin-bottom: 1rem;
+          width: 100%;
+          text-align: center;
+          font-weight: 500;
+      }
+      .messages .error {
+          background-color: #f8d7da;
+          color: #721c24;
+          border: 1px solid #f5c6cb;
+      }
+      .messages .success {
+          background-color: #d4edda;
+          color: #155724;
+          border: 1px solid #c3e6cb;
+      }
+
+
+      .checkbox-hero {
+        width: 100%;
+        align-items: flex-start;
+        color: var(--color-smooth);
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .checkbox-hero input {
+        display: none;
+      }
+
+      .checkbox-cover {
+        width: 1.5rem;
+        height: 1.5rem;
+        display: inline-block;
+        background: var(--item-bg);
+        border-radius: 0.5rem;
+        border: 0.125rem solid var(--item-border);
+        transition: all 0.25s ease 0s;
+        cursor: pointer;
+      }
+
+      .checkbox-hero input:checked + .checkbox-cover {
+        border-color: var(--blue);
+        border-width: 0.4rem;
+      }
+
+      .submit-btn {
+        width: 100%;
+        height: 40px;
+        font-weight: 500;
+        font-size: 1rem;
+        color: var(--color-white);
+        border-radius: 0.5rem;
+        transition: all 0.25s ease 0s;
+        box-shadow: inset 1px 1px 3px var(--shadow);
+        background: var(--blue);
+        border: 1px solid var(--blue-50);
+        cursor: pointer;
+        box-shadow: 0px 4px 4px var(--submit-shadow);
+        transition: all 0.25s ease 0s;
+      }
+
+      .submit-btn:hover {
+        background: var(--blue-hover);
+        border: 1px solid var(--blue-hover-50);
+      }
+
+      .form-bottom {
+        position: fixed;
+        bottom: 1rem;
+        color: var(--color-smooth);
+        font-size: 1rem;
+        font-weight: 500;
+      }
+
+      .form-bottom a {
+        color: var(--blue);
+        text-decoration: none;
+      }
+
+      @media screen and (max-width: 768px) {
+        .prewiev-hero {
+          display: none;
+        }
+        .form-hero {
+          width: 100vw;
+        }
+      }
+    </style>
+  </head>
+  <body class="login-page page-hero">
+    <div class="prewiev-hero">
+      <img src="{% static '/media/home/Sonia CrochetBB.png' %}" alt="Prewiev" />
+    </div>
+
+    <div class="login-form form-hero">
+      <div class="form-head">
+        <span class="logo">
+          <img
+            src="{% static '/media/home/logo2.png' %}"
+            alt="Sonia Crochet Art"
+            style="width: 150%; height: 150%; object-fit: contain"
+          />
+        </span>
+        <h1 class="login-title">¡Hola de Nuevo!</h1>
+      </div>
+
+      {% if messages %}
+        <ul class="messages">
+          {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      <form
+        method="post"
+        action="{% url 'accounts:login' %}" 
+        autocomplete="off"
+        class="form"
+      >
+        {% csrf_token %}
+
+        <label class="input-hero" for="{{ form.username.id_for_label }}">
+          {{ form.username }} 
+          
+          <span class="input-name">Usuario</span>
+          <span class="input-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path
+                d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M20 22C20 19.8783 19.1571 17.8434 17.6569 16.3431C16.1566 14.8429 14.1217 14 12 14C9.87827 14 7.84344 14.8429 6.34315 16.3431C4.84285 17.8434 4 19.8783 4 22"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+          {{ form.username.errors }} 
+        </label>
+
+        <label
+          class="input-hero password-input"
+          for="{{ form.password.id_for_label }}"
+        >
+          {{ form.password }} 
+          
+          <span class="input-name">Contraseña</span>
+          <span class="input-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path
+                d="M6 10V8C6 4.69 7 2 12 2C17 2 18 4.69 18 8V10"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M12 18.5C13.3807 18.5 14.5 17.3807 14.5 16C14.5 14.6193 13.3807 13.5 12 13.5C10.6193 13.5 9.5 14.6193 9.5 16C9.5 17.3807 10.6193 18.5 12 18.5Z"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M17 22H7C3 22 2 21 2 17V15C2 11 3 10 7 10H17C21 10 22 11 22 15V17C22 21 21 22 17 22Z"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+          <a href="#" class="recovery-password">¿Olvidaste la Contraseña?</a>
+          {{ form.password.errors }} 
+        </label>
+
+        <button type="submit" class="submit-btn btn">
+          Iniciar Sesión
+        </button>
+        
+        {% if form.non_field_errors %}
+          <ul class="errorlist">
+            {% for error in form.non_field_errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+
+        <div class="form-bottom">
+          ¿Aún no tienes cuenta?
+          <a href="{% url 'accounts:register_client' %}">Regístrate</a>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,25 @@
+{% extends "SoniaCrochetApp/base.html" %} 
+
+{% block title %} Servicios {% endblock %} 
+
+{% load static %} 
+
+{% block content %}
+
+<div class="container servcies">
+  <h2>Nuestros servicios</h2>
+  <div class="servcies-section-wrapper">
+    {% for servicio in servicios %}
+    <div class="services-box">
+      <img src="{{servicio.imagen.url}}"></img>
+      <h3>{{ servicio.titulo|upper }}</h3>
+      <p>{{servicio.contenido}}</p>
+      <p>{{servicio.created}}</p>
+      <p>{{servicio.update}}</p>
+      
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}
